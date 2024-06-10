@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-echo "MY_CUSTOM_ENV=$(npm config get cache)" >> $GITHUB_ENV
+npm config get cache
 #platform environment:url --environment=main --primary
