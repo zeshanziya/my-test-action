@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
-import * as exec from '@actions/exec'
+import { exec, ExecOptions } from '@actions/exec'
+import * as github from '@actions/github'
 import { wait } from './wait'
 
 /**
@@ -18,7 +19,20 @@ export async function run(): Promise<void> {
     await wait(parseInt(ms, 10))
     core.debug(new Date().toTimeString())
 
-    exec.exec(`${__dirname}/../script/test.sh`)
+    const tempText: Buffer[] = []
+    const options: ExecOptions = {
+      listeners: {
+        stdout: data => {
+          tempText.push(data)
+        }
+      }
+    }
+
+    await exec(`${__dirname}/../script/test.sh`, [], options)
+
+    core.info(
+      `info - ${github.context.ref} = ${github.context.payload} - ${tempText.join()}`
+    )
 
     const { MY_CUSTOM_ENV } = process.env
 
