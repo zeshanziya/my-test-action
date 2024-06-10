@@ -30479,10 +30479,11 @@ async function run() {
             }
         };
         await (0, exec_1.exec)(__nccwpck_require__.ab + "test.sh", [], options);
-        core.info(`info - ${github.context.ref} = ${github.context.payload} - ${tempText.join()}`);
-        const { MY_CUSTOM_ENV } = process.env;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        core.info(`info - ${github.context.ref} - ${github.context.payload} - ${tempText.join()}`);
+        const { GITHUB_REF_NAME } = process.env;
         // Set outputs for other workflow steps to use
-        core.setOutput('time', `${new Date().toTimeString()} - ${MY_CUSTOM_ENV}`);
+        core.setOutput('time', `${new Date().toTimeString()} - ${GITHUB_REF_NAME}`);
     }
     catch (error) {
         // Fail the workflow run if an error occurs

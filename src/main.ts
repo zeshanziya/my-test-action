@@ -30,14 +30,15 @@ export async function run(): Promise<void> {
 
     await exec(`${__dirname}/../script/test.sh`, [], options)
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     core.info(
-      `info - ${github.context.ref} = ${github.context.payload} - ${tempText.join()}`
+      `info - ${github.context.ref} - ${github.context.payload} - ${tempText.join()}`
     )
 
-    const { MY_CUSTOM_ENV } = process.env
+    const { GITHUB_REF_NAME } = process.env
 
     // Set outputs for other workflow steps to use
-    core.setOutput('time', `${new Date().toTimeString()} - ${MY_CUSTOM_ENV}`)
+    core.setOutput('time', `${new Date().toTimeString()} - ${GITHUB_REF_NAME}`)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
