@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import * as exec from '@actions/exec'
 import { wait } from './wait'
 
 /**
@@ -17,8 +18,12 @@ export async function run(): Promise<void> {
     await wait(parseInt(ms, 10))
     core.debug(new Date().toTimeString())
 
+    exec.exec(`${__dirname}/../script/test.sh`)
+
+    const { MY_CUSTOM_ENV } = process.env
+
     // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    core.setOutput('time', `${new Date().toTimeString()} - ${MY_CUSTOM_ENV}`)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
